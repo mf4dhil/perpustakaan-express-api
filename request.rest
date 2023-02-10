@@ -1,0 +1,59 @@
+GET  http://localhost:5000/users
+
+###
+# Show users berdasarkan id
+GET http://localhost:5000/users/cdb62f0b-9ff2-4f42-a688-cd8378a500f8
+
+###
+# Create Users
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+  "name": "Admin",
+  "email": "admin@gmail.com",
+  "password": "admin123",
+  "confPassword": "admin123",
+  "role": "admin"
+}
+
+###
+# Update users
+PATCH http://localhost:5000/users/:id
+Content-Type: application/json
+
+{
+  "name": "Ujang",
+  "email": "admin1@gmail.com",
+  "password": "123",
+  "confPassword": "123",
+  "role": "admin"
+}
+
+###
+#  Delete Users
+DELETE http://localhost:5000/users/:id
+
+###
+# get genre
+GET http://localhost:5000/genre
+###
+# Create Genre
+POST http://localhost:5000/genre
+Content-Type: application/json
+
+{
+  "name": "outlook"
+}
+
+###
+# get category
+GET http://localhost:5000/category
+###
+# Create category
+POST http://localhost:5000/category
+Content-Type: application/json
+
+{
+  "name": ""
+}

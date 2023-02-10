@@ -4,7 +4,7 @@ import { response } from "express";
 
 export const getUser = async (req, res) => {
   try {
-    const response = Users.findAll({
+    const response = await Users.findAll({
       attributes: ['uuid', 'name', 'email', 'role']
     })
     res.status(200).json(response)
