@@ -1,5 +1,7 @@
 import { Sequelize } from "sequelize"
 import db from "../config/Database.js"
+import Books from "./Book.model.js"
+import BookGenres from "./BookGenre.model.js"
 
 const { DataTypes } = Sequelize
 
@@ -26,6 +28,6 @@ const Genres = db.define('genre',
   } 
 )
 
-
+Books.hasMany(Genres, { as: 'Genre' });
 
 export default Genres

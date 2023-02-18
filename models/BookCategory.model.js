@@ -15,14 +15,14 @@ const BookCategorys = db.define('book_category',
         notEmpty: true
       }
     },
-    ID_book: {
+    bookId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
-    ID_category: {
+    categoryId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
@@ -36,8 +36,8 @@ const BookCategorys = db.define('book_category',
 )
 
 Books.hasMany(BookCategorys)
+BookCategorys.belongsTo(Books, {foreignKey: 'bookId'})
 Categorys.hasMany(BookCategorys)
-BookCategorys.belongsTo(Books, {foreignKey: 'ID_book'})
-BookCategorys.belongsTo(Categorys, {foreignKey: 'ID_category'})
+BookCategorys.belongsTo(Categorys, {foreignKey: 'categoryId'})
 
 export default BookCategorys

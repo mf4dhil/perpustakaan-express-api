@@ -43,7 +43,7 @@ POST http://localhost:5000/genre
 Content-Type: application/json
 
 {
-  "name": "outlook"
+  "name": "action"
 }
 
 ###
@@ -65,9 +65,12 @@ Content-Type: application/json
   "name": "Apotheosis", 
   "author": "fadhil", 
   "release_date": "21 april 2023",
-  "genre1": "Fantasy", 
-  "genre2": "Drama", 
-  "genre3": "",
-  "category1": "Fiksi", 
-  "category2": "Novel"
+  "genre1": "fantasy", 
+  "genre2": "drama", 
+  "genre3": "action",
+  "category1": "fiksi", 
+  "category2": "novel"
 }
+
+###
+GET http://localhost:5000/books

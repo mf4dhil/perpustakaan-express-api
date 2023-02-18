@@ -6,79 +6,45 @@ import Categorys from "../models/Category.model.js"
 import Genres from "../models/Genre.model.js"
 
 export const getBook = async (req, res) => {
-  const books = await Books.findAll()
-  const bookCategory = await BookCategorys.findAll({
-    where: {
-      ID_book: books.id
-    }
-  })
-  const bookGenre = await BookGenres.findAll({
-    where: {
-      ID_book: books.id
-    }
-  })
-  if( !books || !bookCategory || !bookGenre ) return res.status(404).json({msg: "Data buku/genre/category tidak ditemukan"})
   try {
     const response = await Books.findAll({
+      attributes: ['uuid', 'name', 'author', 'release_date'],
       include: [
         {
-          model: Categorys,
-          where: {
-            id: bookCategory.ID_category
-          }
+          model: BookCategorys,
+          attributes: ['uuid', 'bookId', 'categoryId']
         },
         {
-          model: Genres,
-          where: {
-            id: bookGenre.ID_genre
-          }
+          model: BookGenres,
+          attributes: ['uuid', 'bookId', 'genreId']
         }
       ]
     })
-    res.status(200).json(response)
+    res.status(200).json({msg: response})
   } catch (error) {
     res.status(500).json({msg: error.message})
   }
 }
 
 export const getBookById = async (req, res) => {
-  const books = await Books.findOne({
-    where: {
-      uuid: req.params.id
-    }
-  })
-  const bookCategory = await BookCategorys.findAll({
-    where: {
-      ID_book: books.id
-    }
-  })
-  const bookGenre = await BookGenres.findAll({
-    where: {
-      ID_book: books.id
-    }
-  })
-  if( !books || !bookCategory || !bookGenre ) return res.status(404).json({msg: "Data buku/genre/category tidak ditemukan"})
   try {
     const response = await Books.findOne({
+      attributes: ['uuid', 'name', 'author', 'release_date'],
       where: {
         uuid: req.params.id
       },
       include: [
         {
-          model: Categorys,
-          where: {
-            id: bookCategory.ID_category
-          }
+          model: BookCategorys,
+          attributes: ['uuid', 'bookId', 'categoryId']
         },
         {
-          model: Genres,
-          where: {
-            id: bookGenre.ID_genre
-          }
+          model: BookGenres,
+          attributes: ['uuid', 'bookId', 'genreId']
         }
       ]
     })
-    res.status(200).json(response)
+    res.status(200).json({msg: response})
   } catch (error) {
     res.status(500).json({msg: error.message})
   }
@@ -90,11 +56,14 @@ export const createBook = async (req, res) => {
       [Op.or]: [{name: genre1},{name: genre2},{name: genre3},]
     }
   })
+  console.log(gnr)
   const ctgr = await Categorys.findAll({
     where: {
       [Op.or]: [{name: category1}, {name: category2}]
     }
   })
+  if( !gnr[0] && !gnr[1] ) return res.status(400).json({msg: "Minimal terdapat Dua genre!"})
+    if( !ctgr[0] && !ctgr[1] ) return res.status(400).json({msg: "Minimal terdapat Dua Category!"})
   try {
     await Books.create(
       {
@@ -109,49 +78,48 @@ export const createBook = async (req, res) => {
       }
     })
     if( !book ) return res.status(404).json({msg: "Book tidak ditemukan"})
-    if( !gnr[0] && !gnr[1] ) return res.status(400).json({msg: "Minimal terdapat Dua genre!"})
-    if( !ctgr[0] && !ctgr[1] ) return res.status(400).json({msg: "Minimal terdapat Dua Category!"})
+    
     if( !gnr[2] ) {
       await BookGenres.bulkCreate([
         {
-          ID_book: book.id,
-          ID_genre: gnr[0].id
+          bookId: book.id,
+          genreId: gnr[0].id
         },
         {
-          ID_book: book.id,
-          ID_genre: gnr[1].id
+          bookId: book.id,
+          genreId: gnr[1].id
         }
       ])
     } else {
       await BookGenres.bulkCreate([
         {
-          ID_book: book.id,
-          ID_genre: gnr[0].id
+          bookId: book.id,
+          genreId: gnr[0].id
         },
         {
-          ID_book: book.id,
-          ID_genre: gnr[1].id
+          bookId: book.id,
+          genreId: gnr[1].id
         },
         {
-          ID_book: book.id,
-          ID_genre: gnr[2].id
+          bookId: book.id,
+          genreId: gnr[2].id
         }
       ])
     }
     if( !ctgr[1] ) {
       await BookCategorys.create({
-        ID_book: book.id,
-        ID_category: ctgr[0].id
+        bookId: book.id,
+        categoryId: ctgr[0].id
       })
     } else {
       await BookCategorys.bulkCreate([
         {
-          ID_book: book.id,
-          ID_category: ctgr[0].id
+          bookId: book.id,
+          categoryId: ctgr[0].id
         },
         {
-          ID_book: book.id,
-          ID_category: ctgr[1].id
+          bookId: book.id,
+          categoryId: ctgr[1].id
         }
       ])
     }
@@ -160,6 +128,7 @@ export const createBook = async (req, res) => {
     res.status(500).json({msg: error.message})
   }
 }
+
 export const updateBook = async (req, res) => {
 
 }

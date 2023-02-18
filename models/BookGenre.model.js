@@ -15,14 +15,14 @@ const BookGenres = db.define('book_genre',
         notEmpty: true
       }
     },
-    ID_book: {
+    bookId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: true
       }
     },
-    ID_genre: {
+    genreId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
@@ -36,8 +36,8 @@ const BookGenres = db.define('book_genre',
 )
 
 Books.hasMany(BookGenres)
+BookGenres.belongsTo(Books, {foreignKey: 'bookId'})
 Genres.hasMany(BookGenres)
-BookGenres.belongsTo(Books, {foreignKey: 'ID_book'})
-BookGenres.belongsTo(Genres, {foreignKey: 'ID_genre'})
+BookGenres.belongsTo(Genres, {foreignKey: 'genreId'})
 
 export default BookGenres

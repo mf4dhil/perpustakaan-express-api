@@ -38,6 +38,4 @@ const Books = db.define('book',
 )
 
 
-
-
 export default Books

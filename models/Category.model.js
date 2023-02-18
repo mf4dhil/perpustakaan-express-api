@@ -1,5 +1,7 @@
 import { Sequelize } from "sequelize"
 import db from "../config/Database.js"
+import Books from "./Book.model.js"
+import BookCategorys from "./BookCategory.model.js"
 
 const { DataTypes } = Sequelize
 
@@ -26,6 +28,6 @@ const Categorys = db.define('category',
   } 
 )
 
-
+Books.hasMany(Categorys , { as: 'Category' });
 
 export default Categorys
